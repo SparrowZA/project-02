@@ -1,13 +1,17 @@
-from django.shortcuts import render
 from django.views.generic import (
     DetailView, 
     ListView, 
-    TemplateView
+    TemplateView,
     )
-from django.views.generic.edit import FormView
+from django.forms import formset_factory
 
-from client.forms.create_client_form import CreateClientForm
-from client.forms.address_form import AddressForm 
+from multi_form_view import MultiModelFormView
+
+# Forms
+from client.forms.client_form import ClientForm
+from client.forms.address_form import AddressForm
+
+#Models
 from client.models import Address, Client
 
 
@@ -29,36 +33,20 @@ class ClientDetailView(DetailView):
         context['address'] = Address.objects.all()
         return context
 
-class ClientForm(FormView):
+class ClientForm(MultiModelFormView):
     success_url ="/clients/"
-
-    form_class = CreateClientForm
-    
     template_name = "client_create_form.html"
 
-    def form_valid(self, form):
-        client = Client(
-            first_name=form.cleaned_data['first_name'],
-            last_name=form.cleaned_data['last_name'],
-            id_number=form.cleaned_data['id_number']
-        )
-
-        '''addressPostal = Address(
-            client=client,
-            address_type=0,
-            street=form.cleaned_data['street'],
-            street_number=form.cleaned_data['street_number'],
-            unit_number=form.cleaned_data['unit_number'],
-            building=form.cleaned_data['building'],
-            area=form.cleaned_data['area'],
-            city=form.cleaned_data['city'],
-            province=form.cleaned_data['province'],
-            country=form.cleaned_data['country'],
-            code=form.cleaned_data['code']
-        )'''
-
-        client.save()
-        
+    def forms_valid(self, forms):
+        # Make sure to save the client form first.
+              
         return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['client'] =  ClientForm
+        address_formset = formset_factory(AddressForm, extra=2, max_num=2)
+        formset = address_formset()
+        context['formset']= formset
 
-
+        return context

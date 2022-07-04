@@ -6,6 +6,7 @@ class AddressForm(forms.ModelForm):
     class Meta:
         model = Address
         fields = [
+            'address_type',
             'street',
             'street_number',
             'unit_number',

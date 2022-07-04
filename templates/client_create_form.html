@@ -5,12 +5,37 @@
     Enter your credentials
   </div>
   <div class="card-body">
-    <form method="post">
+    <form class="form-horizontal" method="POST">
       {% csrf_token %}
-      <h3>Client Information</h3>
-      <div>
-        {{ form.as_p }}
+      <div class="row">
+        <div class="col-sm-6">
+          <h3>Client Information</h3>
+          <div>
+            {{ forms.client.as_p }}
+          </div>
+        </div>
       </div>
+
+      <div class="row">
+        {% for address in formset %}
+          {% if forloop.first %}
+            <div class="col-sm-6">
+              <h4>Physical Address</h4>
+              <!-- <input type="hidden" name="address_type" id="id_address_type" value=""> -->
+              {{ address.as_p }}
+            </div>
+          {% else %}
+            <div class="col-sm-6">
+              <h4>Postal Address</h4>
+              <!-- <input type="text" name="address_type" id="id_address_type"> -->
+              {{ address.as_p }}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+
+
       <input type="submit" value="save">
     </form>
   </div>
