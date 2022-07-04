@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from client.forms.create_client_form import CreateClientForm
+from client.forms.client_form import ClientForm
 from client.utils import id_verifier
 from client.utils.id_verifier import IdVerifier
 
