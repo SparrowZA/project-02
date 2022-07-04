@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card m-3">
+  <div class="card-header">
+    Enter your credentials
+  </div>
+  <div class="card-body">
+    <form method="post">
+      {% csrf_token %}
+      <h3>Client Information</h3>
+      <div>
+        {{ form.as_p }}
+      </div>
+      <input type="submit" value="save">
+    </form>
+  </div>
+</div>
+{% endblock %}
