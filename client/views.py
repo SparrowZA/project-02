@@ -58,7 +58,6 @@ class ClientForm(FormView):
         )'''
 
         client.save()
-        addressPostal.save()
         
         return super().form_valid(form)
 
